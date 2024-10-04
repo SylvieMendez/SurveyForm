@@ -3,18 +3,19 @@
   <head>
     <meta charset="utf-8"/>
     <link rel="stylesheet" href="styles.css">
+    <title>SylvsLux Survey Form</title>
   </head>
   <body>
     <h1 id="title">SylvsLux Survey Form </h1>
     <p id="description"><em>Thank you for taking the time to help us improve our service</em></p>
-    <form id="survey-form">
+    <form id="survey-form" onsubmit="return handleSubmit(event)">
       <fieldset>
         <label id="name-label">Name <input placeholder="Enter your name" id="name" type="text" required/></label>
         <label id="email-label">Email <input placeholder="Enter your Email" id="email" type="email" required/></label>
-        <label id="number-label">Age <input placeholder="Age" id="number" required" type="number" min="10" max="99"/></label>
+        <label id="number-label">Age <input placeholder="Age" id="number" required type="number" min="10" max="99"/></label>
         <label>Which option best describes your satisfaction?
-          <select id="dropdown">
-            <option> Very Satisfied</option>
+          <select id="satisfaction">
+            <option>Very Satisfied</option>
             <option>Satisfied</option>
             <option>Average</option>
             <option>Unsatisfied</option>
@@ -28,19 +29,50 @@
       </fieldset>
       <fieldset>
         <label>What is your favorite style on SylvsLux?
-          <select id="dropdown">
+          <select id="style">
             <option>Precious</option>
             <option>Luxury</option>
             <option>Boujie</option>
           </select>
+        </label>
         <label>What would you like to see improved? (Check all that apply)</label>
         <label><input type="checkbox" value="more styles" name="improve" class="inline"/> More styles</label>
-        <label><input type="checkbox" value="Different colors" name="improve" class="inline"> Different colors</label>
-        <label><input type="checkbox" value="Faster shipping" name="improve" class="inline"> Faster shipping</label>
-        <label>Any comments or suggestions?<textarea placeholder="Enter a comment here.."></textarea>
-        </label>
+        <label><input type="checkbox" value="Different colors" name="improve" class="inline"/> Different colors</label>
+        <label><input type="checkbox" value="Faster shipping" name="improve" class="inline"/> Faster shipping</label>
+        <label>Any comments or suggestions?<textarea placeholder="Enter a comment here.."></textarea></label>
       </fieldset>
       <input type="submit" id="submit"/>
     </form>
+
+    <script>
+      // Handle form submission
+      function handleSubmit(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Get values from the form
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const age = document.getElementById('number').value;
+        const satisfaction = document.getElementById('satisfaction').value;
+        const recommend = document.querySelector('input[name="yes-no"]:checked') ? document.querySelector('input[name="yes-no"]:checked').value : 'No selection';
+        const style = document.getElementById('style').value;
+        const improvements = Array.from(document.querySelectorAll('input[name="improve"]:checked')).map(cb => cb.value).join(', ') || 'None';
+        const comments = document.querySelector('textarea').value;
+
+        // Display a summary of the responses
+        alert(`Thank you for your submission, ${name}!\n\n` +
+              `Email: ${email}\n` +
+              `Age: ${age}\n` +
+              `Satisfaction: ${satisfaction}\n` +
+              `Recommend: ${recommend}\n` +
+              `Favorite Style: ${style}\n` +
+              `Improvements Suggested: ${improvements}\n` +
+              `Comments: ${comments}`);
+
+        // Clear the form fields after submission
+        document.getElementById('survey-form').reset();
+        return false; // Prevent default form submission
+      }
+    </script>
   </body>
 </html>
